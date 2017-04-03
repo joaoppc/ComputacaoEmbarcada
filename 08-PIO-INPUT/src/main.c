@@ -94,9 +94,12 @@ void ledConfig(){
 };
 
 void butConfig(){
-	
+
 	//ativa o clock do PIOD
-	PMC->PMC_PCER0=(BUTTON1_PIO_ID);
+	PMC->PMC_PCER0=(1 << BUTTON1_PIO_ID);
+	PMC->PMC_PCER0=(1 << BUTTON2_PIO_ID);
+	PMC->PMC_PCER0=(1 << BUTTON3_PIO_ID);
+
 	
 	//define o pino dos botões como entrada
 	BUTTON1_PIO->PIO_ODR=(BUTTON1_PIN_MASK);
@@ -150,18 +153,31 @@ int main(void)
 	// Configura botao
 	butConfig();
 	
-	
+
 	/************************************************************************/
 	/* Super loop                                                           */
 	/************************************************************************/
 	while(1){
+		//checa se o botão1 está apertado
 		if(BUTTON1_PIO->PIO_PDSR & (BUTTON1_PIN_MASK)){
+			LED1_PIO->PIO_SODR = LED1_PIN_MASK;
+		}
+		else{
 			LED1_PIO->PIO_CODR = LED1_PIN_MASK;
 		}
-			
+		//checa se o botão2 está apertado
+		if(BUTTON2_PIO->PIO_PDSR & (BUTTON2_PIN_MASK)){
+			LED2_PIO->PIO_SODR = LED2_PIN_MASK;
+		}
 		else{
-			LED1_PIO->PIO_SODR = LED1_PIN_MASK;
-
+			LED2_PIO->PIO_CODR = LED2_PIN_MASK;
+		}
+		//checa se o botão3 está apertado
+		if(BUTTON3_PIO->PIO_PDSR & (BUTTON3_PIN_MASK)){
+			LED3_PIO->PIO_SODR = LED3_PIN_MASK;
+		}
+		else{
+			LED3_PIO->PIO_CODR = LED3_PIN_MASK;
 		}
 	  
 	};
