@@ -48,7 +48,7 @@ volatile uint32_t g_ul_value = 0;
  *  ou ser atualizado pelo PC.
  */
 #define YEAR        2017
-#define MONTH      4
+#define MONTH		4
 #define DAY         17
 #define WEEK        17
 #define HOUR        17
@@ -72,10 +72,9 @@ void TC1_Handler(void){
 
 	/* Avoid compiler warning */
 	UNUSED(ul_dummy);
-
-	/** Muda o estado do LED */
-    //if(flag_led0)
-    //    pin_toggle(LED_PIO, LED_PIN_MASK);
+	
+	afec_start_software_conversion(AFEC0);
+	
 }
 
 /**
@@ -147,6 +146,7 @@ void RTC_init(){
 	/* Ativa interrupcao via alarme */
 	rtc_enable_interrupt(RTC,  RTC_IER_ALREN);
 }
+
 /**
  * Configura TimerCounter (TC0) para gerar uma interrupcao no canal 0-(ID_TC1) 
  * a cada 250 ms (4Hz)
@@ -157,14 +157,16 @@ void TC1_init(void){
     uint32_t ul_sysclk = sysclk_get_cpu_hz();
     
     uint32_t channel = 1;
+	    uint32_t freq = 1;
+
     
     /* Configura o PMC */
     pmc_enable_periph_clk(ID_TC1);    
 
     /** Configura o TC para operar em  4Mhz e interrupçcão no RC compare */
-    tc_find_mck_divisor(4, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);
+    tc_find_mck_divisor(freq, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);
     tc_init(TC0, channel, ul_tcclks | TC_CMR_CPCTRG);
-    tc_write_rc(TC0, channel, (ul_sysclk / ul_div) / 4);
+    tc_write_rc(TC0, channel, (ul_sysclk / ul_div) / freq);
 
     /* Configura e ativa interrupçcão no TC canal 0 */
     NVIC_EnableIRQ((IRQn_Type) ID_TC1);
@@ -223,6 +225,8 @@ int main(void)
 	sysclk_init();
 	ioport_init();
 	board_init();
+	TC1_init();
+	RTC_init();
   
 	/* inicializa delay */
 	delay_init(sysclk_get_cpu_hz());
@@ -278,14 +282,13 @@ int main(void)
 	afec_channel_enable(AFEC0, AFEC_CHANNEL_TEMP_SENSOR);
   afec_start_software_conversion(AFEC0);
 	//pega a temperatura em celcius e coloca em uma variável
-    int temp = (int)convert_adc_to_temp(g_ul_value); 
+     
 	while (1) {
 		if(is_conversion_done == true) {
 			is_conversion_done = false;
-      
-			  printf("Temp : %d \r\n",temp );
-			  afec_start_software_conversion(AFEC0);
-			  delay_s(1);
+				printf("%s Temp : %d \r\n",rtc_get_time(RTC,HOUR,MINUTE,SECOND),(int)convert_adc_to_temp(g_ul_value) );
+			  //afec_start_software_conversion(AFEC0);
+			  
 		}
 	}
 }
