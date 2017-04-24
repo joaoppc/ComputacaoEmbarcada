@@ -286,8 +286,9 @@ int main(void)
 	while (1) {
 		if(is_conversion_done == true) {
 			is_conversion_done = false;
-				printf("%s Temp : %d \r\n",rtc_get_time(RTC,HOUR,MINUTE,SECOND),(int)convert_adc_to_temp(g_ul_value) );
-			  //afec_start_software_conversion(AFEC0);
+			printf(rtc_get_time(RTC,HOUR,MINUTE,SECOND));
+			printf("Temp : %d \r\n",(int)convert_adc_to_temp(g_ul_value) );
+			  
 			  
 		}
 	}
