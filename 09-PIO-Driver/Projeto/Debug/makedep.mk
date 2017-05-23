@@ -38,5 +38,9 @@ src\ASF\sam\utils\cmsis\same70\source\templates\system_same70.c
 
 src\ASF\sam\utils\syscalls\gcc\syscalls.c
 
+src\Driver\pio_insper.c
+
+src\Driver\pmc_insper.c
+
 src\main.c
 

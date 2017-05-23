@@ -10,6 +10,8 @@
 
 #include "asf.h"
 #include "conf_clock.h"
+#include "Driver/pio_insper.h"
+#include "Driver/pmc_insper.h"
 
 /************************************************************************/
 /* Defines                                                              */

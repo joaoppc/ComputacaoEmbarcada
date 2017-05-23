@@ -2627,11 +2627,11 @@ int main(void)
 	butConfig();
   400dc8:	4b17      	ldr	r3, [pc, #92]	; (400e28 <main+0x74>)
   400dca:	4798      	blx	r3
-
 	/************************************************************************/
 	/* Super loop                                                           */
 	/************************************************************************/
 	while(1){
+		//checa se o botão1 está apertado
 		if(BUTTON1_PIO->PIO_PDSR & (BUTTON1_PIN_MASK)){
   400dcc:	4b17      	ldr	r3, [pc, #92]	; (400e2c <main+0x78>)
   400dce:	6bdb      	ldr	r3, [r3, #60]	; 0x3c
@@ -2650,6 +2650,7 @@ int main(void)
   400de2:	2201      	movs	r2, #1
   400de4:	635a      	str	r2, [r3, #52]	; 0x34
 		}
+		//checa se o botão2 está apertado
 		if(BUTTON2_PIO->PIO_PDSR & (BUTTON2_PIN_MASK)){
   400de6:	4b13      	ldr	r3, [pc, #76]	; (400e34 <main+0x80>)
   400de8:	6bdb      	ldr	r3, [r3, #60]	; 0x3c
@@ -2667,6 +2668,7 @@ int main(void)
   400dfa:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
   400dfe:	635a      	str	r2, [r3, #52]	; 0x34
 		}
+		//checa se o botão3 está apertado
 		if(BUTTON3_PIO->PIO_PDSR & (BUTTON3_PIN_MASK)){
   400e00:	4b0b      	ldr	r3, [pc, #44]	; (400e30 <main+0x7c>)
   400e02:	6bdb      	ldr	r3, [r3, #60]	; 0x3c
